@@ -6,6 +6,6 @@ namespace OutcomeReports.SharedKernel
 {
     public interface IUnitOfWork : IDisposable
     {
-        public void Commit();
+        void Commit();
     }
 }

@@ -9,8 +9,7 @@ namespace OutcomeReports.SharedKernel.Extensions
     {
         public static void AddFacility(this IUnityContainer container, IUnityFacility facility)
         {
-            var childContainer = container.CreateChildContainer();
-            facility.Register(childContainer);
+            facility.Register(container);
         }
     }
 }

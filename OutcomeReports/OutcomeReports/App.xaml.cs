@@ -8,6 +8,9 @@ using OutcomeReports.Data.Repositories;
 using OutcomeReports.Facility;
 using Unity;
 using OutcomeReports.SharedKernel.Extensions;
+using Unity.ServiceLocation;
+using CommonServiceLocator;
+using OutcomeReports.ViewModels;
 
 namespace OutcomeReports
 {
@@ -19,12 +22,21 @@ namespace OutcomeReports
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
+            //DependencyService.Register<MockDataStore>();
 
             this.container = new UnityContainer();
             this.container.AddFacility(new OutcomeReportsFacility(sqliteConnectionString));
+            RegisterViewModels(container);
+
+            var unityServiceLocator = new UnityServiceLocator(container);
+            ServiceLocator.SetLocatorProvider(() => unityServiceLocator);
 
             MainPage = new MainPage();
+        }
+
+        private void RegisterViewModels(UnityContainer container)
+        {
+            container.RegisterType<InitialScreenViewModel>();
         }
 
         protected override void OnStart()

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using OutcomeReports.ApplicationService.Abstraction;
+using OutcomeReports.ApplicationService.Implementation;
 using OutcomeReports.Data;
 using OutcomeReports.Domain;
 using OutcomeReports.Domain.Entities;
@@ -28,8 +30,9 @@ namespace OutcomeReports.Facility
                 cfg.CreateMap<Category, CategoryViewModel>();
             });
 
-            container.RegisterType<IOutcomeReportUnitOfWork, OutcomeReportUnitOfWork>(new InjectionConstructor(sqliteConnectionString));
             container.RegisterInstance(mapper, new SingletonLifetimeManager());
+            container.RegisterType<IOutcomeReportUnitOfWork, OutcomeReportUnitOfWork>(new InjectionConstructor(sqliteConnectionString));
+            container.RegisterType<IOutcomeReportService, OutcomeReportService>();
         }
     }
 }
