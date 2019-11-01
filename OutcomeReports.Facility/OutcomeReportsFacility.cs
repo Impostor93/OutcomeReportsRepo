@@ -33,6 +33,7 @@ namespace OutcomeReports.Facility
             container.RegisterInstance(mapper, new SingletonLifetimeManager());
             container.RegisterType<IOutcomeReportUnitOfWork, OutcomeReportUnitOfWork>(new InjectionConstructor(sqliteConnectionString));
             container.RegisterType<IOutcomeReportService, OutcomeReportService>();
+            container.RegisterType<IOutcomeReportServiceProvider, DefaultOutcomeReportServiceProvider>();
         }
     }
 }

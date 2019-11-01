@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OutcomeReports.ApplicationService.Abstraction
 {
-    public interface IOutcomeReportService
+    public interface IOutcomeReportService : IDisposable
     {
         Task<CreatePeriodResponse> CreatePeriodAsync(CreatePeriodRequest request);
 

@@ -33,7 +33,7 @@ namespace OutcomeReports.Views
             if (item == null)
                 return;
 
-            await Navigation.PushAsync(new ItemDetailPage(new ItemDetailViewModel(item)));
+            //await Navigation.PushAsync(new PeriodLinesPage(new ItemDetailViewModel(item)));
 
             // Manually deselect item.
             ItemsListView.SelectedItem = null;
@@ -41,7 +41,7 @@ namespace OutcomeReports.Views
 
         async void AddItem_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushModalAsync(new NavigationPage(new NewItemPage()));
+            await Navigation.PushModalAsync(new NavigationPage(new NewPeriodPage()));
         }
 
         protected override void OnAppearing()

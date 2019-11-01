@@ -1,4 +1,5 @@
-﻿using OutcomeReports.Models;
+﻿using CommonServiceLocator;
+using OutcomeReports.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace OutcomeReports.Views
         public MenuPage()
         {
             InitializeComponent();
-            BindingContext = CommonServiceLocator.ServiceLocator.Current.GetInstance<ViewModels.InitialScreenViewModel>();
+            
             //menuItems = new List<HomeMenuItem>
             //{
             //    new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },

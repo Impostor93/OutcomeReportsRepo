@@ -14,5 +14,7 @@ namespace OutcomeReports.Domain.ViewModels
         public int PeriodLength { get; set; }
 
         public IEnumerable<LineViewModel> Lines { get; set; }
+
+        public string PeriodTitle { get { return $"{Start.Date.ToString("dd/MM/yyyy")} - {End.Date.ToString("dd/MM/yyyy")}"; } }
     }
 }

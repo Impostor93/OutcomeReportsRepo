@@ -6,8 +6,14 @@ namespace OutcomeReports.Models
 {
     public class NewPeriod
     {
-        public DateTime StartDate { get; set; }
+        public NewPeriod(DateTime startDate, DateTime endDate)
+        {
+            StartDate = startDate;
+            EndDate = endDate;
+        }
 
-        public DateTime EndDate { get; set; }
+        public DateTime StartDate { get; }
+
+        public DateTime EndDate { get; }
     }
 }

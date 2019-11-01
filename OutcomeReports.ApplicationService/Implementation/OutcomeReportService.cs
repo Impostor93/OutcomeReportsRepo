@@ -37,11 +37,6 @@ namespace OutcomeReports.ApplicationService.Implementation
                 {
                     response.Exception = ex;
                 }
-                finally
-                {
-                    if (request.ShouldDisposeContext)
-                        unitOfWork.Dispose();
-                }
 
                 return response;
             });
@@ -63,11 +58,6 @@ namespace OutcomeReports.ApplicationService.Implementation
                 catch (Exception ex)
                 {
                     response.Exception = ex;
-                }
-                finally
-                {
-                    if (request.ShouldDisposeContext)
-                        unitOfWork.Dispose();
                 }
 
                 return response;
@@ -94,14 +84,15 @@ namespace OutcomeReports.ApplicationService.Implementation
                 {
                     response.Exception = ex;
                 }
-                finally
-                {
-                    if (request.ShouldDisposeContext)
-                        unitOfWork.Dispose();
-                }
 
                 return response;
             });
+        }
+
+        public void Dispose()
+        {
+            if (ReferenceEquals(unitOfWork, null) == false)
+                unitOfWork.Dispose();
         }
     }
 }

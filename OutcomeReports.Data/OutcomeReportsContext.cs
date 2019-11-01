@@ -12,7 +12,7 @@ namespace OutcomeReports.Data
         
         public OutcomeReportsContext(string dbPath)
         {
-            
+
             //IOS
             //var dbname = "OutcomeReports.sqlite"
             //var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "..","Library", "data")
@@ -20,7 +20,10 @@ namespace OutcomeReports.Data
             //{ Directory.CreateDirectory(path) }
             //var connectionString = Path.Combine(path, dbname)
             //INITIALIZE SQLITE
+
             this.dbPath = dbPath;
+
+            Database.EnsureCreated();
         }
 
         public DbSet<Period> Periods { get; set; }
@@ -31,7 +34,7 @@ namespace OutcomeReports.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite($"FileName={dbPath}");
+            optionsBuilder.UseSqlite($"Filename={dbPath}");
             base.OnConfiguring(optionsBuilder);
         }
 

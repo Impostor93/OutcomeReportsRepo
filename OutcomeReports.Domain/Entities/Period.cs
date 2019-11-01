@@ -19,7 +19,7 @@ namespace OutcomeReports.Domain.Entities
 
         public int PeriodLength { get; set; }
 
-        private ICollection<Line> Lines { get; set; }
+        public ICollection<Line> Lines { get; set; }
 
         public IReadOnlyCollection<Line> GetLines()
         {
