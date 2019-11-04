@@ -7,7 +7,7 @@
              x:Class="OutcomeReports.Views.PeriodLinesPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add Line" />
+        <ToolbarItem Text="Add Line" Command="{Binding AddLine}" />
         <ToolbarItem Text="Scan" />
     </ContentPage.ToolbarItems>
     

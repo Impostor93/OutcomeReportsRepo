@@ -20,6 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\NewPeriodLinePage.xaml.cs">
+      <DependentUpon>NewPeriodLinePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\PeriodLinesPage.xaml.cs">
       <DependentUpon>PeriodLinesPage.xaml</DependentUpon>
     </Compile>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="OutcomeReports.Views.NewPeriodLinePage"
+             Title="{Binding Title}"
+             x:Name="BrowseItemsPage">
+
+    <ContentPage.ToolbarItems>
+        
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Spacing="20" Padding="15">
+        <Label Text="Amount: " FontSize="Medium" />
+        <Entry Text="{Binding Amount}" FontSize="Small" Keyboard="Numeric"/>
+        
+        <Label Text="Date: " FontSize="Medium" />
+        <DatePicker Date="{Binding Date}" FontSize="Small" Margin="0" />
+
+        <Label Text="Category: " FontSize="Medium" />
+        <Entry Text="{Binding Amount}" FontSize="Small" Keyboard="Numeric" />
+        <!--<SelectableItemsView SelectedItems="{Binding Date}" Margin="0" />-->
+
+        <Label Text="Description: " FontSize="Medium" />
+        <Editor Text="{Binding Description}" HeightRequest="100" />
+
+        <Button Text="Save" Command="{Binding AddNewPeriodLine}" Margin="10" ></Button>
+        <Button Text="Cancel" Command="{Binding Cancel}" Margin="10" ></Button>
+    </StackLayout>
+    
+</ContentPage>
