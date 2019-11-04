@@ -34,6 +34,8 @@ namespace OutcomeReports.Facility
             container.RegisterType<IOutcomeReportUnitOfWork, OutcomeReportUnitOfWork>(new InjectionConstructor(sqliteConnectionString));
             container.RegisterType<IOutcomeReportService, OutcomeReportService>();
             container.RegisterType<IOutcomeReportServiceProvider, DefaultOutcomeReportServiceProvider>();
+            container.RegisterType<IOutcomeReportCategoryService, OutcomeReportCategoryService>();
+            container.RegisterType<IOutcomeReportCategoryServiceProvider, DefaultOutcomeCategoryServiceProvider>();
         }
     }
 }

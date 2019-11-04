@@ -1,9 +1,13 @@
 ﻿namespace OutcomeReports.ViewModels
 {
+    using OutcomeReports.ApplicationService;
+    using OutcomeReports.ApplicationService.Abstraction;
     using OutcomeReports.Domain.ViewModels;
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Text;
+    using System.Threading.Tasks;
     using System.Windows.Input;
     using Xamarin.Forms;
 
@@ -17,8 +21,8 @@
             set { SetProperty(ref amount, value); }
         }
 
-        int category;
-        public int Category
+        CategoryViewModel category;
+        public CategoryViewModel Category
         {
             get { return category; }
             set { SetProperty(ref category, value); }
@@ -46,14 +50,23 @@
             set { SetProperty(ref errorMessage, value); }
         }
 
+        public ObservableCollection<CategoryViewModel> Categories { get; set; }
+
         public ICommand AddNewPeriodLine { get; set; }
 
         public INavigation Navigation { get; set; }
 
-        public NewPeriodLinesViewModel()
+        public NewPeriodLinesViewModel(IOutcomeReportCategoryServiceProvider categoryServiceProvider)
         {
+            Task.Run(async () => await LoadCategories(categoryServiceProvider));
+
             AddNewPeriodLine = new Command(async () =>
             {
+                if (IsBusy)
+                    return;
+
+                IsBusy = true;
+
                 var message = string.Empty;
                 if (ValidateDates(ref message) == false)
                 {
@@ -61,13 +74,32 @@
                 }
                 else
                 {
-                    var vm = new LineViewModel();
-                    MessagingCenter.Send(this, "AddPeriodLine", vm);
+                    MessagingCenter.Send(this, "AddPeriodLine", this);
                     await Navigation.PopModalAsync();
                 }
+
+                IsBusy = false;
             });
         }
-        
+
+        private async Task LoadCategories(IOutcomeReportCategoryServiceProvider categoryServiceProvider)
+        {
+            //TODO: handle busyness
+            using (var categoryService = categoryServiceProvider.GetService())
+            {
+                var response = await categoryService.GetAllAsync(new GetAllCategoriesRequest());
+                if (ReferenceEquals(response.Exception, null) == false)
+                {
+                    foreach(var ct in response.Categories)
+                        Categories.Add(ct);
+                }
+                else
+                {
+                    //TODO: catch the issue
+                }
+            }
+        }
+
         private bool ValidateDates(ref string message)
         {
             return true;

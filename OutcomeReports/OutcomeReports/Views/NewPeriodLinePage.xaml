@@ -13,6 +13,8 @@
     </ContentPage.ToolbarItems>
 
     <StackLayout Spacing="20" Padding="15">
+        <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        
         <Label Text="Amount: " FontSize="Medium" />
         <Entry Text="{Binding Amount}" FontSize="Small" Keyboard="Numeric"/>
         
@@ -20,8 +22,7 @@
         <DatePicker Date="{Binding Date}" FontSize="Small" Margin="0" />
 
         <Label Text="Category: " FontSize="Medium" />
-        <Entry Text="{Binding Amount}" FontSize="Small" Keyboard="Numeric" />
-        <!--<SelectableItemsView SelectedItems="{Binding Date}" Margin="0" />-->
+        <Picker ItemsSource="{Binding Categories}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding Category}" Margin="0" />
 
         <Label Text="Description: " FontSize="Medium" />
         <Editor Text="{Binding Description}" HeightRequest="100" />

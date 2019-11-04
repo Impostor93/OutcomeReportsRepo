@@ -36,13 +36,10 @@ namespace OutcomeReports
 
         private void RegisterViewModels(UnityContainer container)
         {
-            //container.RegisterType<PeriodsViewModel>();
-            //container.RegisterType<NewPeriodViewModel>();
-            //container.RegisterType<PeriodLinesViewModel>();
-
             container.RegisterInstance(typeof(PeriodsViewModel));
             container.RegisterInstance(typeof(NewPeriodViewModel));
             container.RegisterInstance(typeof(PeriodLinesViewModel));
+            container.RegisterInstance(typeof(NewPeriodLinesViewModel));
         }
 
         protected override void OnStart()
