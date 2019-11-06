@@ -11,7 +11,7 @@ namespace OutcomeReports.ApplicationService.Abstraction
 
         Task<GetActivePeriodsResponse> GetActivePeriodsAsync(GetActivePeriodsRequest request);
 
-        //TODO: Implement get by id
+        Task<GetPeriodResponse> GetPeriodAsync(GetPeriodByIdRequest request);
 
         Task<AddLineResponse> AddLineAsync(AddLineRequest request);
     }

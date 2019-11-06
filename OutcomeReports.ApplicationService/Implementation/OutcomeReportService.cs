@@ -89,6 +89,34 @@ namespace OutcomeReports.ApplicationService.Implementation
             });
         }
 
+        public async Task<GetPeriodResponse> GetPeriodAsync(GetPeriodByIdRequest request)
+        {
+            return await Task.Run(() =>
+            {
+                var response = new GetPeriodResponse();
+
+                if (request.Id == Guid.Empty)
+                    throw new ArgumentException(nameof(request.Id));
+
+                try
+                {
+                    var period = unitOfWork.PeriodRepository.GetPeriod(request.Id);
+                    if (ReferenceEquals(period, null))
+                        throw new Exception("Period is not found!");
+
+                    var mapper = mapperConfig.CreateMapper();
+
+                    response.Period = mapper.Map<Period, PeriodViewModel>(period);
+                }
+                catch (Exception ex)
+                {
+                    response.Exception = ex;
+                }
+
+                return response;
+            });
+        }
+
         public void Dispose()
         {
             if (ReferenceEquals(unitOfWork, null) == false)

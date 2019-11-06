@@ -3,6 +3,7 @@ using OutcomeReports.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -15,10 +16,26 @@ namespace OutcomeReports.Views
     {
         //MainPage RootPage { get => Application.Current.MainPage as MainPage; }
         //List<HomeMenuItem> menuItems;
+
+        public ICommand CategoryPage { get; set; }
+        public ICommand PeriodPage { get; set; }
+
         public MenuPage()
         {
             InitializeComponent();
-            
+
+            CategoryPage = new Command(() =>
+            {
+                MessagingCenter.Send(this, "NavigateToCategories", this);
+            });
+
+            PeriodPage = new Command(() =>
+            {
+                MessagingCenter.Send(this, "NavigateToPeriod", this);
+            });
+
+            BindingContext = this;
+
             //menuItems = new List<HomeMenuItem>
             //{
             //    new HomeMenuItem {Id = MenuItemType.Browse, Title="Browse" },

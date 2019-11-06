@@ -38,7 +38,7 @@ namespace OutcomeReports.Data.Repositories
 
         public Period GetPeriod(Guid periodId)
         {
-            var period = baseRepo.Set.FirstOrDefault(e => e.Id == periodId);
+            var period = baseRepo.Set.Include("Lines").FirstOrDefault(e => e.Id == periodId);
             
             return period;
         }

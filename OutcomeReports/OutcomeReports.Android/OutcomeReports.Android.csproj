@@ -76,9 +76,13 @@
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />
     <PackageReference Include="Xamarin.Android.Support.Core.Utils" Version="28.0.0.1" />
     <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+    <PackageReference Include="ZXing.Net.Mobile">
+      <Version>2.4.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
+    <Compile Include="QRCodeService\QrScanningService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -107,6 +111,10 @@
     <AndroidResource Include="Resources\drawable\xamarin_logo.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OutcomeReport.QRService\OutcomeReport.QRService.csproj">
+      <Project>{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}</Project>
+      <Name>OutcomeReport.QRService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\OutcomeReports.Data\OutcomeReports.Data.csproj">
       <Project>{a0eec11c-8cf7-4d45-9c6b-91b7023d8367}</Project>
       <Name>OutcomeReports.Data</Name>

@@ -20,7 +20,7 @@ namespace OutcomeReports.Converters
             if (date.HasValue == false)
                 return string.Empty;
 
-            return date.Value.Date.ToString(culture.DateTimeFormat);
+            return date.Value.Date.ToString(culture.DateTimeFormat.ShortDatePattern);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

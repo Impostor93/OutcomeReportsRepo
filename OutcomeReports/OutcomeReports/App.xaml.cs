@@ -11,6 +11,7 @@ using OutcomeReports.SharedKernel.Extensions;
 using Unity.ServiceLocation;
 using CommonServiceLocator;
 using OutcomeReports.ViewModels;
+using OutcomeReport.QRService;
 
 namespace OutcomeReports
 {
@@ -38,6 +39,8 @@ namespace OutcomeReports
             container.RegisterInstance(typeof(NewPeriodViewModel));
             container.RegisterInstance(typeof(PeriodLinesViewModel));
             container.RegisterInstance(typeof(NewPeriodLinesViewModel));
+            container.RegisterInstance(typeof(CategoriesViewModel));
+            container.RegisterInstance(typeof(NewCategoryViewModel));
         }
 
         protected override void OnStart()

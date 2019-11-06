@@ -18,39 +18,18 @@ namespace OutcomeReports.Views
     [DesignTimeVisible(false)]
     public partial class NewPeriodLinePage : ContentPage
     {
-        ItemsViewModel viewModel;
-
         public NewPeriodLinePage()
         {
             InitializeComponent();
+            var vm = CommonServiceLocator.ServiceLocator.Current.GetInstance<NewPeriodLinesViewModel>();
+            vm.Navigation = Navigation;
 
-            BindingContext = viewModel = new ItemsViewModel();
+            BindingContext = vm;
         }
-
-        async void OnItemSelected(object sender, SelectedItemChangedEventArgs args)
-        {
-            
-            //var item = args.SelectedItem as Item;
-            //if (item == null)
-            //    return;
-
-            //await Navigation.PushAsync(new PeriodLinesPage(new ItemDetailViewModel(item)));
-
-            // Manually deselect item.
-            //ItemsListView.SelectedItem = null;
-        }
-
-        async void AddItem_Clicked(object sender, EventArgs e)
-        {
-            await Navigation.PushModalAsync(new NavigationPage(new NewPeriodPage()));
-        }
-
+        
         protected override void OnAppearing()
         {
             base.OnAppearing();
-
-            if (viewModel.Items.Count == 0)
-                viewModel.LoadItemsCommand.Execute(null);
         }
     }
 }

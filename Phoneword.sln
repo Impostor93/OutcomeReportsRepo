@@ -15,11 +15,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutcomeReports.iOS", "Outco
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OutcomeReports", "OutcomeReports\OutcomeReports\OutcomeReports.csproj", "{151D4BE1-1D96-455B-AB60-D9436FEF6714}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutcomeReports.ApplicationService", "OutcomeReports.ApplicationService\OutcomeReports.ApplicationService.csproj", "{37E549FF-95D9-45BB-91FA-05068315B980}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OutcomeReports.ApplicationService", "OutcomeReports.ApplicationService\OutcomeReports.ApplicationService.csproj", "{37E549FF-95D9-45BB-91FA-05068315B980}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "OutcomeReportsDomain", "OutcomeReportsDomain", "{E9E34493-B61D-4853-BA55-3F7473180CEF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutcomeReports.Facility", "OutcomeReports.Facility\OutcomeReports.Facility.csproj", "{5ABB634E-B2E0-42C8-BA47-D59496BA5BE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OutcomeReports.Facility", "OutcomeReports.Facility\OutcomeReports.Facility.csproj", "{5ABB634E-B2E0-42C8-BA47-D59496BA5BE7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OutcomeReport.QRService", "OutcomeReport.QRService\OutcomeReport.QRService.csproj", "{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,18 @@ Global
 		{5ABB634E-B2E0-42C8-BA47-D59496BA5BE7}.Release|iPhone.Build.0 = Release|Any CPU
 		{5ABB634E-B2E0-42C8-BA47-D59496BA5BE7}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{5ABB634E-B2E0-42C8-BA47-D59496BA5BE7}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|iPhone.Build.0 = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{B3E84A19-8DDC-4CC3-A771-B3034D6DDDF5}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

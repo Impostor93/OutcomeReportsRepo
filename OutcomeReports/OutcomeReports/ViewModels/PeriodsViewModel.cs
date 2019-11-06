@@ -21,7 +21,7 @@ namespace OutcomeReports.ViewModels
 
         public INavigation Navigation { get; set; }
 
-        public PeriodsViewModel(IOutcomeReportServiceProvider outcomeReportServiceProvider)
+        public PeriodsViewModel(IOutcomeReportServiceProvider outcomeReportServiceProvider, IOutcomeReportCategoryServiceProvider w)
         {
             ActivePeriods = new ObservableCollection<PeriodViewModel>();
             LoadData(outcomeReportServiceProvider);
