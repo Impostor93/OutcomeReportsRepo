@@ -7,6 +7,6 @@
     {
         Task<GetAllCategoriesResponse> GetAllAsync(GetAllCategoriesRequest request);
 
-        //TODO: Implement Create method
+        Task<CreateCategoriesResponse> CreateCategoryAsync(CreateCategoriesRequest request);
     }
 }

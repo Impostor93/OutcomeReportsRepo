@@ -15,21 +15,44 @@ namespace OutcomeReports.ViewModels
 {
     public class PeriodLinesViewModel : BaseViewModel
     {
-        public PeriodViewModel PeriodViewModel { get; set; }
+        public Guid PeriodViewModelId { get; set; }
 
         public ObservableCollection<LineViewModel> Lines { get; set; }
 
-        public ICommand AddLine;
+        public ICommand AddLine { get; set; }
 
-        internal INavigation Navigation;
+        public ICommand ScanQr { get; set; }
+
+        internal INavigation Navigation { get; set; }
 
         public PeriodLinesViewModel(IOutcomeReportServiceProvider provider)
         {
-            Lines = new ObservableCollection<LineViewModel>(PeriodViewModel.Lines);
+            Lines = new ObservableCollection<LineViewModel>();
+
+            Task.Run(async () => await LoadData(provider));
 
             AddLine = new Command(async () =>
             {
                 await Navigation.PushModalAsync(new NewPeriodLinePage());
+            });
+
+            ScanQr = new Command(async () =>
+            {
+                try
+                {
+                    var scanner = DependencyService.Get<OutcomeReport.QRService.IQrScanningService>();
+                    var result = await scanner.ScanAsync();
+                    if (result != null)
+                    {
+                        var text = result;
+                        var page = new TestQrView(text);
+                        await Navigation.PushModalAsync(new NavigationPage(page));
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
             });
 
             MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
@@ -40,13 +63,19 @@ namespace OutcomeReports.ViewModels
                 IsBusy = true;
                 using (var periodService = provider.GetService())
                 {
-                    //TODO: Implement add line method logic 
+                    DateTime? date = item.Date;
+                    if (ReferenceEquals(date, null) || date == DateTime.MinValue || date == DateTime.MaxValue)
+                    {
+                        date = null;
+                    }
 
-                    //var response = await periodService.CreatePeriodAsync(new CreatePeriodRequest(item.StartDate, item.EndDate));
-                    //if (ReferenceEquals(response.Exception, null) == false)
-                    //{
-                    //    Debug.WriteLine(response.Exception);
-                    //}
+                    var request = new AddLineRequest(PeriodViewModelId, item.Amount, item.Category.Id, item.Description, date);
+
+                    var response = await periodService.AddLineAsync(request);
+                    if (ReferenceEquals(response.Exception, null) == false)
+                    {
+                        Debug.WriteLine(response.Exception);
+                    }
                 }
 
                 IsBusy = false;
@@ -63,13 +92,17 @@ namespace OutcomeReports.ViewModels
             IsBusy = true;
             using (var periodService = provider.GetService())
             {
-                //TODO: Implement get by id
-
-                //var response = await periodService.GetPeriodByIdAsync();
-                //if (ReferenceEquals(response.Exception, null) == false)
-                //{
-                //    Debug.WriteLine(response.Exception);
-                //}
+                var response = await periodService.GetPeriodAsync(new GetPeriodByIdRequest(PeriodViewModelId));
+                if (ReferenceEquals(response.Exception, null) == false)
+                {
+                    Debug.WriteLine(response.Exception);
+                }
+                else
+                {
+                    Lines.Clear();
+                    foreach (var line in response.Period.Lines)
+                        Lines.Add(line);
+                }
             }
 
             IsBusy = false;

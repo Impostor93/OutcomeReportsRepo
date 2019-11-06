@@ -6,6 +6,9 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using Xamarin.Forms;
+using OutcomeReport.QRService;
+using OutcomeReports.Droid.QRCodeService;
 
 namespace OutcomeReports.Droid
 {
@@ -21,6 +24,10 @@ namespace OutcomeReports.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+
+            ZXing.Mobile.MobileBarcodeScanner.Initialize(Application);
+
+            DependencyService.Register<IQrScanningService, QrScanningService>();
 
             var sqliteConnectionString = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "OutcomeReports.sqlite");
             LoadApplication(new App(sqliteConnectionString));

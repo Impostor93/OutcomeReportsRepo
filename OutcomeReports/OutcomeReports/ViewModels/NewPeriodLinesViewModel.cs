@@ -6,6 +6,7 @@
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Input;
@@ -54,10 +55,16 @@
 
         public ICommand AddNewPeriodLine { get; set; }
 
+        public ICommand Cancel { get; set; }
+
         public INavigation Navigation { get; set; }
 
         public NewPeriodLinesViewModel(IOutcomeReportCategoryServiceProvider categoryServiceProvider)
         {
+            Title = "Period New Line";
+            Date = DateTime.Now;
+
+            Categories = new ObservableCollection<CategoryViewModel>();
             Task.Run(async () => await LoadCategories(categoryServiceProvider));
 
             AddNewPeriodLine = new Command(async () =>
@@ -80,24 +87,35 @@
 
                 IsBusy = false;
             });
+
+            Cancel = new Command(async () =>
+            {
+                await Navigation.PopModalAsync();
+            });
         }
 
         private async Task LoadCategories(IOutcomeReportCategoryServiceProvider categoryServiceProvider)
         {
-            //TODO: handle busyness
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+
             using (var categoryService = categoryServiceProvider.GetService())
             {
                 var response = await categoryService.GetAllAsync(new GetAllCategoriesRequest());
-                if (ReferenceEquals(response.Exception, null) == false)
+                if (ReferenceEquals(response.Exception, null))
                 {
                     foreach(var ct in response.Categories)
                         Categories.Add(ct);
                 }
                 else
                 {
-                    //TODO: catch the issue
+                    Debug.WriteLine(response.Exception.Message);
                 }
             }
+
+            IsBusy = false;
         }
 
         private bool ValidateDates(ref string message)

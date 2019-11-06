@@ -19,7 +19,7 @@ namespace OutcomeReports.Views
         {
             InitializeComponent();
             var vm = ServiceLocator.Current.GetInstance<PeriodLinesViewModel>();
-            vm.PeriodViewModel = viewModel;
+            vm.PeriodViewModelId = viewModel.Id;
             vm.Navigation = this.Navigation;
 
             BindingContext = vm;

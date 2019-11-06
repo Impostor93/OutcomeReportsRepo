@@ -31,7 +31,19 @@ namespace OutcomeReports.Data
             }
         }
 
-        public ICategoryRepository CategoryRepository => throw new NotImplementedException();
+        ICategoryRepository categoryRepository;
+        public ICategoryRepository CategoryRepository
+        {
+            get
+            {
+                if (ReferenceEquals(categoryRepository, null))
+                {
+                    categoryRepository = new CategoryRepository(context);
+                }
+
+                return categoryRepository;
+            }
+        }
 
         public void Commit()
         {

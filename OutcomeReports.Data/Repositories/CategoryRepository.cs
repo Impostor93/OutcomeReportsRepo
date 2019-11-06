@@ -2,21 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using OutcomeReports.Domain.Entities;
     using OutcomeReports.Domain.Repositories;
 
     public class CategoryRepository : ICategoryRepository
     {
-        public void Create(string Name)
+        private RepositoryBase<Category> baseRepo;
+
+        public CategoryRepository(OutcomeReportsContext context)
         {
-            //TODO: Implement
-            throw new NotImplementedException();
+            this.baseRepo = new RepositoryBase<Category>(context);
+        }
+
+        public void Create(string name)
+        {
+            this.baseRepo.Create(new Category() { Name = name });
         }
 
         public IEnumerable<Category> GetAllCategories()
         {
-            //TODO: Implement
-            throw new NotImplementedException();
+            return this.baseRepo.Set.ToList();
         }
     }
 }

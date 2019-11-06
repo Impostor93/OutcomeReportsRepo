@@ -42,6 +42,32 @@
             });
         }
 
+        public async Task<CreateCategoriesResponse> CreateCategoryAsync(CreateCategoriesRequest request)
+        {
+            return await Task.Run(() =>
+            {
+                if (string.IsNullOrEmpty(request.NewCategoryName))
+                    throw new ArgumentNullException(nameof(request.NewCategoryName));
+
+                var response = new CreateCategoriesResponse();
+
+                try
+                {
+                    var mapper = mapperConfig.CreateMapper();
+
+                    unitOfWork.CategoryRepository.Create(request.NewCategoryName);
+
+                    unitOfWork.Commit();
+                }
+                catch (Exception ex)
+                {
+                    response.Exception = ex;
+                }
+
+                return response;
+            });
+        }
+
         public void Dispose()
         {
             if (ReferenceEquals(unitOfWork, null) == false)

@@ -11,10 +11,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="2.2.6" />
     <PackageReference Include="Unity" Version="5.5.5" />
     <PackageReference Include="Xamarin.Forms" Version="4.2.0.709249" />  
-    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.2.0" />  
+    <PackageReference Include="ZXing.Net.Mobile" Version="2.4.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\OutcomeReport.QRService\OutcomeReport.QRService.csproj" />
     <ProjectReference Include="..\..\OutcomeReports.ApplicationService\OutcomeReports.ApplicationService.csproj" />
     <ProjectReference Include="..\..\OutcomeReports.Facility\OutcomeReports.Facility.csproj" />
   </ItemGroup>
@@ -32,7 +34,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="Views\CategoriesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\NewCategoryModalView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Views\PeriodsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\TestQrView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
