@@ -22,8 +22,6 @@ namespace OutcomeReports
         {
             InitializeComponent();
 
-            //DependencyService.Register<MockDataStore>();
-
             this.container = new UnityContainer();
             this.container.AddFacility(new OutcomeReportsFacility(sqliteConnectionString));
             RegisterViewModels(container);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 using Foundation;
@@ -22,8 +23,20 @@ namespace OutcomeReports.iOS
         //
         public override bool FinishedLaunching(UIApplication app, NSDictionary options)
         {
+            SQLitePCL.Batteries_V2.Init();
+
             global::Xamarin.Forms.Forms.Init();
-            LoadApplication(new App());
+
+            var dbname = "OutcomeReports.sqlite";
+            var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "..", "Library", "data");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            var connectionString = Path.Combine(path, dbname);
+            
+            
+            LoadApplication(new App(connectionString));
 
             return base.FinishedLaunching(app, options);
         }

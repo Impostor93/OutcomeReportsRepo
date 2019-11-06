@@ -12,15 +12,6 @@ namespace OutcomeReports.Data
         
         public OutcomeReportsContext(string dbPath)
         {
-
-            //IOS
-            //var dbname = "OutcomeReports.sqlite"
-            //var path = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments), "..","Library", "data")
-            //if(!Directory.Exist(path))
-            //{ Directory.CreateDirectory(path) }
-            //var connectionString = Path.Combine(path, dbname)
-            //INITIALIZE SQLITE
-
             this.dbPath = dbPath;
 
             Database.EnsureCreated();
