@@ -6,7 +6,7 @@
              mc:Ignorable="d"
              xmlns:l="clr-namespace:OutcomeReports.Converters"
              x:Class="OutcomeReports.Views.PeriodLinesPage">
-       
+
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add Line" Command="{Binding AddLine}" />
         <ToolbarItem Text="Scan" Command="{Binding ScanQr}" />

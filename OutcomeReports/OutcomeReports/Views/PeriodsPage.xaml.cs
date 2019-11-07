@@ -28,7 +28,6 @@ namespace OutcomeReports.Views
                     vm.OpenPeriod.Execute((Domain.ViewModels.PeriodViewModel)e.Item);
                 }
             };
-            
         }
     }
 }

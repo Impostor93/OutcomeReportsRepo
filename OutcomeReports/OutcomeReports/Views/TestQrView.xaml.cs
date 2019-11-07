@@ -21,6 +21,13 @@ namespace OutcomeReports.Views
 
             QrString = qrString;
 
+            var splitedContent = QrString.Split('*');
+            var number = splitedContent[0];
+            var number1 = splitedContent[1];
+            var date = splitedContent[2];
+            var hour = splitedContent[3];
+            var amount = splitedContent[4];
+
             BindingContext = this;
         }
     }
