@@ -9,6 +9,7 @@ using Android.OS;
 using Xamarin.Forms;
 using OutcomeReport.QRService;
 using OutcomeReports.Droid.QRCodeService;
+using System.IO;
 
 namespace OutcomeReports.Droid
 {

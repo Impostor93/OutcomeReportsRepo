@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +18,8 @@ namespace OutcomeReports.ViewModels
 
         public ICommand OpenPeriod { get; set; }
 
+        public ICommand Disappearing { get; set; }
+
         public ObservableCollection<PeriodViewModel> ActivePeriods { get; set; }
 
         public INavigation Navigation { get; set; }
@@ -26,35 +29,42 @@ namespace OutcomeReports.ViewModels
             ActivePeriods = new ObservableCollection<PeriodViewModel>();
             LoadData(outcomeReportServiceProvider);
 
-            MessagingCenter.Subscribe<NewPeriodViewModel, NewPeriod>(this, "AddPeriod", async (obj, item) =>
-            {
-                if (IsBusy)
-                    return;
-
-                IsBusy = true;
-                using (var periodService = outcomeReportServiceProvider.GetService())
-                {
-                    var response = await periodService.CreatePeriodAsync(new CreatePeriodRequest(item.StartDate, item.EndDate));
-                    if (ReferenceEquals(response.Exception, null) == false)
-                    {
-                        Debug.WriteLine(response.Exception);
-                    }
-                }
-
-                IsBusy = false;
-
-                LoadData(outcomeReportServiceProvider);
-            });
-
             CreateNewPeriod = new Command(async () =>
             {
-                await Navigation.PushModalAsync(new NewPeriodPage());
+                MessagingCenter.Subscribe<NewPeriodViewModel, NewPeriod>(this, "AddPeriod", async (obj, item) =>
+                {
+                    await AddPeriod(outcomeReportServiceProvider, item);
+                });
+
+                var page = new NewPeriodPage();
+                page.Disappearing += (obj, arg) => { MessagingCenter.Unsubscribe<NewPeriodViewModel, NewPeriod>(this, "AddPeriod"); };
+                await Navigation.PushModalAsync(page);
             });
 
             OpenPeriod = new Command(async (item) =>
             {
                 await Navigation.PushAsync(new PeriodLinesPage((PeriodViewModel)item));
             });
+        }
+
+        private async Task AddPeriod(IOutcomeReportServiceProvider outcomeReportServiceProvider, NewPeriod item)
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            using (var periodService = outcomeReportServiceProvider.GetService())
+            {
+                var response = await periodService.CreatePeriodAsync(new CreatePeriodRequest(item.StartDate, item.EndDate));
+                if (ReferenceEquals(response.Exception, null) == false)
+                {
+                    Debug.WriteLine(response.Exception);
+                }
+            }
+
+            IsBusy = false;
+
+            LoadData(outcomeReportServiceProvider);
         }
 
         private void LoadData(IOutcomeReportServiceProvider outcomeReportServiceProvider)

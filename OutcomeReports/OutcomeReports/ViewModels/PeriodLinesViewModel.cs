@@ -33,7 +33,17 @@ namespace OutcomeReports.ViewModels
 
             AddLine = new Command(async () =>
             {
-                await Navigation.PushModalAsync(new NewPeriodLinePage());
+                MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
+                {
+                    await AddPeriodLine(provider, item);
+                });
+
+                var page = new NewPeriodLinePage();
+                page.Disappearing += (obj, arg) =>
+                {
+                    MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
+                };
+                await Navigation.PushModalAsync(page);
             });
 
             ScanQr = new Command(async () =>
@@ -44,9 +54,24 @@ namespace OutcomeReports.ViewModels
                     var result = await scanner.ScanAsync();
                     if (result != null)
                     {
-                        var text = result;
-                        var page = new TestQrView(text);
-                        await Navigation.PushModalAsync(new NavigationPage(page));
+
+                        var splitedContent = result.Split('*');
+                        var date = DateTime.Parse($"{splitedContent[2]} {splitedContent[3]}");
+                        var amount = double.Parse(splitedContent[4]);
+
+                        MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
+                        {
+                            await AddPeriodLine(provider, item);
+                        });
+
+                        var page = new NewPeriodLinePage();
+                        page.Disappearing += (obj, arg) =>
+                        {
+                            MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
+                        };
+                        ((NewPeriodLinesViewModel)page.BindingContext).Amount = amount;
+                        ((NewPeriodLinesViewModel)page.BindingContext).Date = date;
+                        await Navigation.PushModalAsync(page);
                     }
                 }
                 catch (Exception ex)
@@ -54,34 +79,34 @@ namespace OutcomeReports.ViewModels
                     throw;
                 }
             });
+        }
 
-            MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
+        private async Task AddPeriodLine(IOutcomeReportServiceProvider provider, NewPeriodLinesViewModel item)
+        {
+            if (IsBusy)
+                return;
+
+            IsBusy = true;
+            using (var periodService = provider.GetService())
             {
-                if (IsBusy)
-                    return;
-
-                IsBusy = true;
-                using (var periodService = provider.GetService())
+                DateTime? date = item.Date;
+                if (ReferenceEquals(date, null) || date == DateTime.MinValue || date == DateTime.MaxValue)
                 {
-                    DateTime? date = item.Date;
-                    if (ReferenceEquals(date, null) || date == DateTime.MinValue || date == DateTime.MaxValue)
-                    {
-                        date = null;
-                    }
-
-                    var request = new AddLineRequest(PeriodViewModelId, item.Amount, item.Category.Id, item.Description, date);
-
-                    var response = await periodService.AddLineAsync(request);
-                    if (ReferenceEquals(response.Exception, null) == false)
-                    {
-                        Debug.WriteLine(response.Exception);
-                    }
+                    date = null;
                 }
 
-                IsBusy = false;
+                var request = new AddLineRequest(PeriodViewModelId, item.Amount, item.Category.Id, item.Description, date);
 
-                await LoadData(provider);
-            });
+                var response = await periodService.AddLineAsync(request);
+                if (ReferenceEquals(response.Exception, null) == false)
+                {
+                    Debug.WriteLine(response.Exception);
+                }
+            }
+
+            IsBusy = false;
+
+            await LoadData(provider);
         }
 
         private async Task LoadData(IOutcomeReportServiceProvider provider)

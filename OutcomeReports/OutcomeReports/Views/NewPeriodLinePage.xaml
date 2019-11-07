@@ -27,8 +27,8 @@
         <Label Text="Description: " FontSize="Medium" />
         <Editor Text="{Binding Description}" HeightRequest="100" />
 
-        <Button Text="Save" Command="{Binding AddNewPeriodLine}" Margin="10" ></Button>
-        <Button Text="Cancel" Command="{Binding Cancel}" Margin="10" ></Button>
+        <Button Text="Save" Command="{Binding AddNewPeriodLine}" Margin="1" Padding="5" ></Button>
+        <Button Text="Cancel" Command="{Binding Cancel}" Margin="1" Padding="5"></Button>
     </StackLayout>
     
 </ContentPage>

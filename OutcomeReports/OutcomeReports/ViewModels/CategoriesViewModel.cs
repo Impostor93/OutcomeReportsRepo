@@ -17,6 +17,8 @@
 
         public ICommand AddCategory { get; set; }
 
+        public ICommand Disappearing { get; set; }
+
         public INavigation Navigation { get; set; }
 
         public CategoriesViewModel(IOutcomeReportCategoryServiceProvider provider)
@@ -26,22 +28,30 @@
 
             AddCategory = new Command(async () =>
             {
-                await Navigation.PushModalAsync(new NewCategoryModalView());
-            });
-
-            MessagingCenter.Subscribe<NewCategoryViewModel, string>(this, "AddCategory", async (obj, item) =>
-            {
-                using (var service = provider.GetService())
+                MessagingCenter.Subscribe<NewCategoryViewModel, string>(this, "AddCategory", async (obj, item) =>
                 {
-                    var categoriesResponse = await service.CreateCategoryAsync(new CreateCategoriesRequest(item));
-                    if (ReferenceEquals(categoriesResponse.Exception, null) == false)
-                    {
-                        Debug.WriteLine(categoriesResponse.Exception);
-                    }
-                }
+                    await AddCategoryInternl(provider, item);
+                });
 
-                await LoadDate(provider);
+                var page = new NewCategoryModalView();
+                page.Disappearing += (obj, args) => { MessagingCenter.Unsubscribe<NewCategoryViewModel, string>(this, "AddCategory"); };
+                await Navigation.PushModalAsync(page);
             });
+            
+        }
+
+        private async Task AddCategoryInternl(IOutcomeReportCategoryServiceProvider provider, string item)
+        {
+            using (var service = provider.GetService())
+            {
+                var categoriesResponse = await service.CreateCategoryAsync(new CreateCategoriesRequest(item));
+                if (ReferenceEquals(categoriesResponse.Exception, null) == false)
+                {
+                    Debug.WriteLine(categoriesResponse.Exception);
+                }
+            }
+
+            await LoadDate(provider);
         }
 
         private async Task LoadDate(IOutcomeReportCategoryServiceProvider provider)
