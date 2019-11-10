@@ -18,7 +18,10 @@ namespace OutcomeReports.Views
         //List<HomeMenuItem> menuItems;
 
         public ICommand CategoryPage { get; set; }
+
         public ICommand PeriodPage { get; set; }
+
+        public ICommand ReportPage { get; set; }
 
         public MenuPage()
         {
@@ -32,6 +35,11 @@ namespace OutcomeReports.Views
             PeriodPage = new Command(() =>
             {
                 MessagingCenter.Send(this, "NavigateToPeriod", this);
+            });
+
+            ReportPage = new Command(() =>
+            {
+                MessagingCenter.Send(this, "NavigateToReport", this);
             });
 
             BindingContext = this;

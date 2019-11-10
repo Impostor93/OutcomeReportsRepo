@@ -35,7 +35,8 @@ namespace OutcomeReports.Domain.Entities
         {
             if (date.HasValue)
             {
-                //TODO: validate if date fall in the Period frames
+                if (date < Start || date > End)
+                    throw new Exception("The line date does not fall within period range!");
             }
             else
             {
@@ -57,7 +58,8 @@ namespace OutcomeReports.Domain.Entities
 
         public static Period StartPeriod(DateTime startDate, DateTime endDate)
         {
-            //TODO validate start and end dates
+            if (startDate > endDate)
+                throw new Exception("Invalid period range!");
 
             var periodLength = (int)(endDate - startDate).TotalDays;
 
@@ -67,6 +69,42 @@ namespace OutcomeReports.Domain.Entities
         public static Period StartPeriod(DateTime startDate, int dayCounts)
         {
             return StartPeriod(startDate, startDate.AddDays(dayCounts));
+        }
+
+        public IEnumerable<KeyValuePair<int, double>> GetReportByCategories()
+        {
+            var groups = Lines.GroupBy(e => e.CategoryId);
+            var outcomesByCategory = new List<KeyValuePair<int, double>>();
+            foreach (var group in groups)
+            {
+                var categoryId = group.Key;
+                var totalAmountPerCategory = group.Sum(e => e.Amount);
+
+                outcomesByCategory.Add(new KeyValuePair<int, double>(categoryId, totalAmountPerCategory));
+            }
+
+            return outcomesByCategory;
+        }
+
+        public IEnumerator<KeyValuePair<DateTime, double>> GetReportByDate()
+        {
+            var outcomesByDateTime = new List<KeyValuePair<DateTime, double>>();
+            var groupsByDate = Lines.GroupBy(e => e.Date);
+            var outcomesByDate = new List<KeyValuePair<DateTime, double>>();
+            foreach (var group in groupsByDate)
+            {
+                var date = group.Key;
+                var totalAmountPerDate = group.Sum(e => e.Amount);
+
+                outcomesByDateTime.Add(new KeyValuePair<DateTime, double>(date, totalAmountPerDate));
+            }
+
+            return (IEnumerator<KeyValuePair<DateTime, double>>)outcomesByDateTime;
+        }
+
+        public double TotalAmount()
+        {
+            return Lines.Sum(e => e.Amount);
         }
     }
 }

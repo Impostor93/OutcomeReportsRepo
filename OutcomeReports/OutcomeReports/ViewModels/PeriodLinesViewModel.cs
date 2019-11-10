@@ -19,16 +19,20 @@ namespace OutcomeReports.ViewModels
 
         public ObservableCollection<LineViewModel> Lines { get; set; }
 
+        public ObservableCollection<CategoryViewModel> Categories { get; set; }
+
         public ICommand AddLine { get; set; }
 
         public ICommand ScanQr { get; set; }
 
         internal INavigation Navigation { get; set; }
 
-        public PeriodLinesViewModel(IOutcomeReportServiceProvider provider)
+        public PeriodLinesViewModel(IOutcomeReportServiceProvider provider, IOutcomeReportCategoryServiceProvider categoryServiceProvider)
         {
             Lines = new ObservableCollection<LineViewModel>();
+            Categories = new ObservableCollection<CategoryViewModel>();
 
+            Task.Run(async () => await LoadCategories(categoryServiceProvider));
             Task.Run(async () => await LoadData(provider));
 
             AddLine = new Command(async () =>
@@ -48,37 +52,42 @@ namespace OutcomeReports.ViewModels
 
             ScanQr = new Command(async () =>
             {
-                try
+                var scanner = DependencyService.Get<OutcomeReport.QRService.IQrScanningService>();
+                var result = await scanner.ScanAsync();
+                if (result != null)
                 {
-                    var scanner = DependencyService.Get<OutcomeReport.QRService.IQrScanningService>();
-                    var result = await scanner.ScanAsync();
-                    if (result != null)
+                    MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
                     {
+                        await AddPeriodLine(provider, item);
+                    });
 
-                        var splitedContent = result.Split('*');
-                        var date = DateTime.Parse($"{splitedContent[2]} {splitedContent[3]}");
-                        var amount = double.Parse(splitedContent[4]);
-
-                        MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
-                        {
-                            await AddPeriodLine(provider, item);
-                        });
-
-                        var page = new NewPeriodLinePage();
-                        page.Disappearing += (obj, arg) =>
-                        {
-                            MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
-                        };
-                        ((NewPeriodLinesViewModel)page.BindingContext).Amount = amount;
-                        ((NewPeriodLinesViewModel)page.BindingContext).Date = date;
-                        await Navigation.PushModalAsync(page);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw;
+                    var page = new NewPeriodLinePage();
+                    page.Disappearing += (obj, arg) =>
+                    {
+                        MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
+                    };
+                    ((NewPeriodLinesViewModel)page.BindingContext).Amount = result.Amount;
+                    ((NewPeriodLinesViewModel)page.BindingContext).Date = result.Date;
+                    await Navigation.PushModalAsync(page);
                 }
             });
+        }
+
+        private async Task LoadCategories(IOutcomeReportCategoryServiceProvider categoryServiceProvider)
+        {
+            using (var categoryService = categoryServiceProvider.GetService())
+            {
+                var response = await categoryService.GetAllAsync(new GetAllCategoriesRequest());
+                if (ReferenceEquals(response.Exception, null))
+                {
+                    foreach (var c in response.Categories)
+                        Categories.Add(c);
+                }
+                else
+                {
+                    Debug.WriteLine(response.Exception);
+                }
+            }
         }
 
         private async Task AddPeriodLine(IOutcomeReportServiceProvider provider, NewPeriodLinesViewModel item)

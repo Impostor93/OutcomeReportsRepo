@@ -18,6 +18,8 @@ namespace OutcomeReports.Views
 
         NavigationPage Periods;
 
+        NavigationPage Report;
+
         public MainPage()
         {
             InitializeComponent();
@@ -25,17 +27,23 @@ namespace OutcomeReports.Views
             MasterBehavior = MasterBehavior.Popover;
 
             Category = new NavigationPage(new CategoriesPage());
+            Report = new NavigationPage(new PeriodReportPage());
             Periods = (NavigationPage)Detail;
 
             MessagingCenter.Subscribe<MenuPage, MenuPage>(this, "NavigateToCategories", (a, b) =>
             {
                 Detail = Category;
             });
+
             MessagingCenter.Subscribe<MenuPage, MenuPage>(this, "NavigateToPeriod", (a, b) =>
             {
                 Detail = Periods;
             });
-            
+
+            MessagingCenter.Subscribe<MenuPage, MenuPage>(this, "NavigateToReport", (a, b) =>
+            {
+                Detail = Report;
+            });
         }
     }
 }

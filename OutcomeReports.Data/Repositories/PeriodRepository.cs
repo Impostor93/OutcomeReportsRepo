@@ -33,7 +33,7 @@ namespace OutcomeReports.Data.Repositories
 
         public IEnumerable<Period> GetActivePeriods()
         {
-            return baseRepo.Set.Where(e => e.Start < DateTime.Now && e.End > DateTime.Now).Include("Lines").ToList();
+            return baseRepo.Set.Where(e => e.Start <= DateTime.Now && e.End >= DateTime.Now).Include("Lines").ToList();
         }
 
         public Period GetPeriod(Guid periodId)

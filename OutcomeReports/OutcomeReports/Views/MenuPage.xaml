@@ -18,6 +18,7 @@
     <StackLayout VerticalOptions="FillAndExpand">
         <Button Text="Periods" Command="{Binding PeriodPage}" />
         <Button Text="Categories" Command="{Binding CategoryPage}" />
+        <Button Text="Reports" Command="{Binding ReportPage}" />
     </StackLayout>
 
 </ContentPage>

@@ -12,6 +12,7 @@ using Unity.ServiceLocation;
 using CommonServiceLocator;
 using OutcomeReports.ViewModels;
 using OutcomeReport.QRService;
+using OutcomeReports.Domain.ViewModels;
 
 namespace OutcomeReports
 {
@@ -41,6 +42,7 @@ namespace OutcomeReports
             container.RegisterInstance(typeof(NewPeriodLinesViewModel));
             container.RegisterInstance(typeof(CategoriesViewModel));
             container.RegisterInstance(typeof(NewCategoryViewModel));
+            container.RegisterInstance(typeof(ViewModels.PeriodReportViewModel));
         }
 
         protected override void OnStart()

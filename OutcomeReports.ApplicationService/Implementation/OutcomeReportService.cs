@@ -1,14 +1,15 @@
-﻿using AutoMapper;
-using OutcomeReports.ApplicationService.Abstraction;
-using OutcomeReports.Domain;
-using OutcomeReports.Domain.Entities;
-using OutcomeReports.Domain.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace OutcomeReports.ApplicationService.Implementation
+﻿namespace OutcomeReports.ApplicationService.Implementation
 {
+    using AutoMapper;
+    using OutcomeReports.ApplicationService.Abstraction;
+    using OutcomeReports.Domain;
+    using OutcomeReports.Domain.Entities;
+    using OutcomeReports.Domain.ViewModels;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     public class OutcomeReportService : IOutcomeReportService
     {
         private readonly IOutcomeReportUnitOfWork unitOfWork;
@@ -53,7 +54,7 @@ namespace OutcomeReports.ApplicationService.Implementation
                     var activePeriods = unitOfWork.PeriodRepository.GetActivePeriods();
                     var mapper = mapperConfig.CreateMapper();
 
-                     response.PeriodViewModels = mapper.Map<IEnumerable<Period>, IEnumerable<PeriodViewModel>>(activePeriods);
+                    response.PeriodViewModels = mapper.Map<IEnumerable<Period>, IEnumerable<PeriodViewModel>>(activePeriods);
                 }
                 catch (Exception ex)
                 {
@@ -115,6 +116,69 @@ namespace OutcomeReports.ApplicationService.Implementation
 
                 return response;
             });
+        }
+
+        public async Task<GetPeriodReportResponse> GetPeriodReportAsync(GetPeriodReportRequest request)
+        {
+            return await Task.Run(() =>
+            {
+                var response = new GetPeriodReportResponse();
+
+                try
+                {
+                    var period = unitOfWork.PeriodRepository.GetPeriod(request.PeriodId);
+                    var categories = unitOfWork.CategoryRepository.GetAllCategories();
+
+                    if (ReferenceEquals(period, null))
+                        throw new Exception("Period is not found!");
+
+                    var mapper = mapperConfig.CreateMapper();
+                    var outcomesByDateTime = period.GetReportByDate();
+
+                    var outcomesByCategory = new List<KeyValuePair<CategoryViewModel, double>>();
+                    foreach (var reportForCategory in period.GetReportByCategories())
+                    {
+                        var category = categories.First(e => e.Id == reportForCategory.Key);
+                        var categoryVM = mapper.Map<Category, CategoryViewModel>(category);
+                        outcomesByCategory.Add(new KeyValuePair<CategoryViewModel, double>(categoryVM, reportForCategory.Value));
+                    }
+
+                    var periodReport = new PeriodReportViewModel(period.TotalAmount(), outcomesByCategory, outcomesByDateTime);
+
+                    response.PeriodReport = periodReport;
+                }
+                catch (Exception ex)
+                {
+                    response.Exception = ex;
+                }
+
+                return response;
+            });
+        }
+
+        public async Task<GetAllPeriodsResponse> GetAllPeriodsAsync(GetAllPeriodsRequest request)
+        {
+            return await Task.Run(() =>
+            {
+                var response = new GetAllPeriodsResponse();
+
+                try
+                {
+                    var periods = unitOfWork.PeriodRepository.GetPeriods();
+                    var mapper = mapperConfig.CreateMapper();
+
+                    var periodViewModels = mapper.Map<IEnumerable<Period>, IEnumerable<PeriodViewModel>>(periods);
+
+                    response.PeriodViewModels = periodViewModels;
+                }
+                catch (Exception ex)
+                {
+                    response.Exception = ex;
+                }
+
+                return response;
+            });
+            
         }
 
         public void Dispose()
