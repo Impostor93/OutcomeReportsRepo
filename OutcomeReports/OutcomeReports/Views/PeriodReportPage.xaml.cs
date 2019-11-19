@@ -9,16 +9,23 @@ namespace OutcomeReports.Views
     {
         public PeriodReportPage()
         {
+           
+        }
+
+        protected override void OnAppearing()
+        {
             var vm = CommonServiceLocator.ServiceLocator.Current.GetInstance<PeriodReportViewModel>();
+            vm.Navigation = this.Navigation;
             BindingContext = vm;
             InitializeComponent();
 
             ListViewMenu.ItemTapped += (obj, e) => {
                 if (e != null && e.Item != null)
                 {
-                    vm.OnPeriodSelected.Execute((Domain.ViewModels.PeriodViewModel)e.Item);
+                    vm.OnPeriodSelected.Execute(((Domain.ViewModels.PeriodViewModel)e.Item).Id);
                 }
-           };
+            };
+            base.OnAppearing();
         }
     }
 }

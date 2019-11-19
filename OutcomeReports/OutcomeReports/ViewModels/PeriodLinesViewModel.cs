@@ -52,24 +52,31 @@ namespace OutcomeReports.ViewModels
 
             ScanQr = new Command(async () =>
             {
+                MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
+                {
+                    await AddPeriodLine(provider, item);
+                });
+
+                var page = new NewPeriodLinePage();
+                page.Disappearing += (obj, arg) =>
+                {
+                    MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
+                };
+
                 var scanner = DependencyService.Get<OutcomeReport.QRService.IQrScanningService>();
                 var result = await scanner.ScanAsync();
+
                 if (result != null)
                 {
-                    MessagingCenter.Subscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine", async (obj, item) =>
-                    {
-                        await AddPeriodLine(provider, item);
-                    });
-
-                    var page = new NewPeriodLinePage();
-                    page.Disappearing += (obj, arg) =>
-                    {
-                        MessagingCenter.Instance.Unsubscribe<NewPeriodLinesViewModel, NewPeriodLinesViewModel>(this, "AddPeriodLine");
-                    };
                     ((NewPeriodLinesViewModel)page.BindingContext).Amount = result.Amount;
                     ((NewPeriodLinesViewModel)page.BindingContext).Date = result.Date;
-                    await Navigation.PushModalAsync(page);
+                } 
+                else
+                {
+                    ((NewPeriodLinesViewModel)page.BindingContext).Description = "An error occurred while getting info from QR code!";
                 }
+
+                await Navigation.PushModalAsync(page);
             });
         }
 

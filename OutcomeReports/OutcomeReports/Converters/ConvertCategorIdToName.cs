@@ -5,6 +5,7 @@
     using System.Globalization;
     using System.Linq;
     using OutcomeReports.Domain.ViewModels;
+    using OutcomeReports.ViewModels;
     using Xamarin.Forms;
 
     public class ConvertCategorIdToName : IValueConverter
@@ -14,11 +15,16 @@
             if (ReferenceEquals(value, null))
                 return string.Empty;
 
-            if (ReferenceEquals(parameter, null))
+            var listView = parameter as ListView;
+            if (ReferenceEquals(listView, null))
+                return value;
+
+            var context = listView.BindingContext as PeriodLinesViewModel;
+            if (ReferenceEquals(context, null))
                 return value;
 
             var categoryId = int.Parse(value.ToString());
-            var allCategories = (parameter as IEnumerable<CategoryViewModel>);
+            var allCategories = context.Categories;
 
             if (ReferenceEquals(allCategories, null))
                 return categoryId;

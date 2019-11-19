@@ -6,7 +6,7 @@
 
     public class PeriodReportViewModel
     {
-        public PeriodReportViewModel(double totalAmount, IEnumerable<KeyValuePair<CategoryViewModel, double>> outcomesByCategory, IEnumerator<KeyValuePair<DateTime, double>> outcomesByDateTime)
+        public PeriodReportViewModel(double totalAmount, IEnumerable<KeyValuePair<CategoryViewModel, double>> outcomesByCategory, IEnumerable<KeyValuePair<DateTime, double>> outcomesByDateTime)
         {
             TotalAmount = totalAmount;
             OutcomesByCategory = outcomesByCategory;
@@ -17,6 +17,6 @@
         public double TotalAmount { get; }
         public IEnumerable<KeyValuePair<CategoryViewModel, double>> OutcomesByCategory { get; }
 
-        public IEnumerator<KeyValuePair<DateTime, double>> OutcomesByDate { get; }
+        public IEnumerable<KeyValuePair<DateTime, double>> OutcomesByDate { get; }
     }
 }

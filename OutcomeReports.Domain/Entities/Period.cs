@@ -86,11 +86,10 @@ namespace OutcomeReports.Domain.Entities
             return outcomesByCategory;
         }
 
-        public IEnumerator<KeyValuePair<DateTime, double>> GetReportByDate()
+        public IEnumerable<KeyValuePair<DateTime, double>> GetReportByDate()
         {
             var outcomesByDateTime = new List<KeyValuePair<DateTime, double>>();
             var groupsByDate = Lines.GroupBy(e => e.Date);
-            var outcomesByDate = new List<KeyValuePair<DateTime, double>>();
             foreach (var group in groupsByDate)
             {
                 var date = group.Key;
@@ -99,7 +98,7 @@ namespace OutcomeReports.Domain.Entities
                 outcomesByDateTime.Add(new KeyValuePair<DateTime, double>(date, totalAmountPerDate));
             }
 
-            return (IEnumerator<KeyValuePair<DateTime, double>>)outcomesByDateTime;
+            return outcomesByDateTime;
         }
 
         public double TotalAmount()
